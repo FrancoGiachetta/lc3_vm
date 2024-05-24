@@ -85,7 +85,7 @@ pub fn execute_instruction(mem: &mut Memory, reg: &mut [u16], instr: u16, runnin
 }
 
 fn sign_extend(mut x: u16, bit_count: u8) -> u16 {
-    if (x >> (bit_count - 1)) & 1 == 1 {
+    if (x >> (bit_count - 1)) & 1 != 0 {
         x |= 0xFFFF << bit_count;
     }
 

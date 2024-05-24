@@ -10,14 +10,14 @@ pub fn add(instr: u16, reg: &mut [u16]) {
     if imm_flag == 1 {
         let imm5: u16 = sign_extend(instr & 0x1F, 5);
 
-        let val = reg[r1 as usize] as u32 + imm5 as u32;
+        let val = reg[r1 as usize].wrapping_add(imm5);
 
-        reg[r0 as usize] = val as u16;
+        reg[r0 as usize] = val;
     } else {
         let r2: u16 = instr & 0x7;
-        let val = reg[r1 as usize] as u32 + reg[r2 as usize] as u32;
+        let val = reg[r1 as usize].wrapping_add(reg[r2 as usize]);
 
-        reg[r0 as usize] = val as u16;
+        reg[r0 as usize] = val;
     }
 
     update_flags(reg, r0);

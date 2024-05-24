@@ -2,7 +2,7 @@ use std::os::fd::BorrowedFd;
 
 use nix::sys::{select, time::TimeVal};
 
-use libc::{FD_SET, FD_ZERO, STDIN_FILENO};
+use libc::STDIN_FILENO;
 
 pub const PC_START: u16 = 0x3000;
 pub const R_COUNT: usize = Register::RCOUNT as usize;

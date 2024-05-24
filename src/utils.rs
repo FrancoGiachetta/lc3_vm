@@ -1,9 +1,13 @@
-use std::io::{stdin, Read};
+use std::io::Read;
 
 pub fn get_char() -> u8 {
-    let mut buffer = [0_u8];
+    let input = std::io::stdin()
+        .bytes()
+        .next()
+        .and_then(|result| result.ok())
+        .unwrap();
 
-    stdin().read_exact(&mut buffer).unwrap();
+    print!("{}", input);
 
-    buffer[0]
+    input
 }

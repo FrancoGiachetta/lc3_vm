@@ -9,13 +9,13 @@ use crate::memory::Memory;
 pub fn read_image_file(file: File) -> io::Result<Memory> {
     let mut buffer = BufReader::new(file);
     let origin = buffer.read_u16::<BigEndian>()?;
-    let mut address = origin as usize;
+    let mut address = origin;
     let mut mem = Memory::new();
 
     loop {
         match buffer.read_u16::<BigEndian>() {
             Ok(inst) => {
-                mem.mem_write(address as u16, inst);
+                mem.mem_write(address, inst);
                 address += 1;
             }
             Err(e) => {

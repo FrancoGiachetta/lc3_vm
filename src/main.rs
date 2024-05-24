@@ -50,9 +50,9 @@ fn execute_program(mut memory: Memory) {
     setup::setup();
 
     while running {
-        reg[Register::RPC as usize] += 1;
         let instr: u16 = memory.mem_read(reg[Register::RPC as usize]);
-
+        reg[Register::RPC as usize] += 1;
+        println!("Sume");
         instructions::execute_instruction(&mut memory, &mut reg, instr, &mut running);
     }
 }

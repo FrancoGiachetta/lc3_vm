@@ -29,4 +29,5 @@ pub fn setup() {
             process::exit(130);
         }
     });
+    disable_input_buffering();
 }
