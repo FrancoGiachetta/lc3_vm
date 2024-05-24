@@ -7,7 +7,7 @@ mod setup;
 mod utils;
 
 use core::panic;
-use std::env;
+use std::env::{self, Args};
 
 use flags::Flags;
 use memory::Memory;
@@ -15,17 +15,15 @@ use registers::{Register, R_COUNT};
 use setup::restore_input_buffering;
 
 fn main() {
-    setup::setup();
-
-    let args: Vec<String> = env::args().collect();
+    let args: Args = env::args();
     let argc = args.len();
 
-    if argc < 2 {
+    if argc < 1 {
         /* show usage string */
         panic!("lc3 [image-file1] ...\n");
     }
 
-    for arg in args {
+    for arg in args.skip(1) {
         match image::read_image(arg) {
             Ok(mem) => {
                 execute_program(mem);
@@ -49,9 +47,11 @@ fn execute_program(mut memory: Memory) {
 
     let mut running = true;
 
+    setup::setup();
+    
     while running {
-        reg[Register::RPC as usize] += 1;
         let instr: u16 = memory.mem_read(reg[Register::RPC as usize]);
+        reg[Register::RPC as usize] += 1;
 
         instructions::execute_instruction(&mut memory, &mut reg, instr, &mut running);
     }

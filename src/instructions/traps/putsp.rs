@@ -3,8 +3,8 @@ use std::io::{stdout, Write};
 use crate::{memory::Memory, registers::Register};
 
 pub fn putsp(reg: &mut [u16], mem: &mut Memory) {
-    let mut index = reg[Register::RR0 as usize];
-    let mut c = mem.mem_read(index);
+    let mut index = reg[Register::RR0 as usize] as usize;
+    let mut c = mem.mem[index];
 
     while c != 0x0000 {
         let c1 = ((c & 0xFF) as u8) as char;
@@ -18,7 +18,7 @@ pub fn putsp(reg: &mut [u16], mem: &mut Memory) {
 
         index += 1;
 
-        c = mem.mem_read(index);
+        c = mem.mem[index];
     }
     stdout().flush().expect("Flushed");
 }

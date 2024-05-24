@@ -1,7 +1,8 @@
-use libc::{SIGINT, STDIN_FILENO};
-use termios::{self, tcsetattr, Termios, ECHO, ICANON, TCSANOW};
+use std::{process, thread};
 
-use crate::utils::singnal_int;
+use libc::STDIN_FILENO;
+use signal_hook::{consts::signal::SIGINT, iterator::Signals};
+use termios::{self, tcsetattr, Termios, ECHO, ICANON, TCSANOW};
 
 pub fn disable_input_buffering() {
     let mut termios = Termios::from_fd(STDIN_FILENO).unwrap();
@@ -19,6 +20,13 @@ pub fn restore_input_buffering() {
 }
 
 pub fn setup() {
-    unsafe { libc::signal(SIGINT, singnal_int()) };
-    disable_input_buffering();
+    let mut signals = Signals::new(&[SIGINT]).unwrap();
+
+    thread::spawn(move || {
+        for _sig in signals.forever() {
+            restore_input_buffering();
+
+            process::exit(130);
+        }
+    });
 }

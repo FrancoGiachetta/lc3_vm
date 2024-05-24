@@ -7,6 +7,8 @@ pub fn br(instr: u16, reg: &mut [u16]) {
     let cond_flag = (instr >> 9) & 0x7;
 
     if cond_flag & reg[Register::RCOND as usize] == 1 {
-        reg[Register::RPC as usize] += pc_offset;
+        let val = reg[Register::RPC as usize] as u32 + pc_offset as u32;
+
+        reg[Register::RPC as usize] = val as u16;
     }
 }

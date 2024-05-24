@@ -5,7 +5,7 @@ mod out;
 mod puts;
 mod putsp;
 
-use crate::{memory::Memory, registers::Register};
+use crate::{memory::Memory, setup::disable_input_buffering};
 
 pub enum Traps {
     TRAPGETC = 0x20,  /* get character from keyboard, not echoed onto the terminal */
@@ -17,7 +17,7 @@ pub enum Traps {
 }
 
 pub fn handle_trap(instr: u16, mem: &mut Memory, running: &mut bool, reg: &mut [u16]) {
-    reg[Register::RR7 as usize] = reg[Register::RPC as usize];
+    disable_input_buffering();
 
     match instr & 0xFF {
         x if x == Traps::TRAPGETC as u16 => get_c::get_c(reg),
