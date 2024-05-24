@@ -1,9 +1,9 @@
-use libc::c_int;
+use std::io::{stdin, Read};
 
-extern "C" {
-    fn getchar() -> c_int;
-}
+pub fn get_char() -> u8 {
+    let mut buffer = [0_u8];
+    
+    stdin().read_exact(&mut buffer).unwrap();
 
-pub fn get_char() -> i32 {
-    unsafe { getchar() }
+    buffer[0]
 }
