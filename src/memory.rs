@@ -22,11 +22,14 @@ impl Memory {
 
     pub fn mem_read(&mut self, address: u16) -> u16 {
         if address == MappedRegister::MRKBSR as u16 {
-            if registers::check_key() {
-                self.mem[MappedRegister::MRKBSR as usize] = 1 << 15;
-                self.mem[MappedRegister::MRKBDR as usize] = utils::get_char() as u16;
-            } else {
-                self.mem[MappedRegister::MRKBSR as usize] = 0;
+            match registers::check_key() {
+                Ok(_) => {
+                    self.mem[MappedRegister::MRKBSR as usize] = 1 << 15;
+                    self.mem[MappedRegister::MRKBDR as usize] = utils::get_char() as u16;
+                }
+                Err(_) => {
+                    self.mem[MappedRegister::MRKBSR as usize] = 0;
+                }
             }
         }
 

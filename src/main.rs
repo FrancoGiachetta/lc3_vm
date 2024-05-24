@@ -48,10 +48,10 @@ fn execute_program(mut memory: Memory) {
     let mut running = true;
 
     setup::setup();
-    
+
     while running {
-        let instr: u16 = memory.mem_read(reg[Register::RPC as usize]);
         reg[Register::RPC as usize] += 1;
+        let instr: u16 = memory.mem_read(reg[Register::RPC as usize]);
 
         instructions::execute_instruction(&mut memory, &mut reg, instr, &mut running);
     }

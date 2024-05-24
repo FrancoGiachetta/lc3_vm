@@ -1,4 +1,6 @@
-use std::ptr::null_mut;
+use std::os::fd::BorrowedFd;
+
+use nix::sys::{select, time::TimeVal};
 
 use libc::{FD_SET, FD_ZERO, STDIN_FILENO};
 
@@ -24,20 +26,12 @@ pub enum MappedRegister {
     MRKBDR = 0xFE02, /* keyboard data */
 }
 
-pub fn check_key() -> bool {
-    let mut readfds: libc::fd_set = unsafe { std::mem::MaybeUninit::uninit().assume_init() };
+pub fn check_key() -> Result<i32, nix::errno::Errno> {
+    let mut readfds = select::FdSet::new();
+    let stdin_fileno = unsafe { BorrowedFd::borrow_raw(STDIN_FILENO) };
+    let mut timeout = TimeVal::new(0, 0);
 
-    unsafe {
-        FD_ZERO(&mut readfds);
-        FD_SET(STDIN_FILENO, &mut readfds);
+    readfds.insert(stdin_fileno);
 
-        let writefds = null_mut();
-        let errorfds = null_mut();
-        let mut timeout: libc::timeval = libc::timeval {
-            tv_sec: 0,
-            tv_usec: 0,
-        };
-
-        libc::select(1, &mut readfds, writefds, errorfds, &mut timeout) != 0
-    }
+    select::select(1, &mut readfds, None, None, &mut timeout)
 }
