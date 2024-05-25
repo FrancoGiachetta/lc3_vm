@@ -7,11 +7,9 @@ pub fn jsr(instr: u16, reg: &mut [u16]) {
 
     reg[Register::RR7 as usize] = reg[Register::RPC as usize];
 
-    if long_flag == 1 {
+    if long_flag != 0 {
         let pc_offset: u16 = sign_extend(instr & 0x7FF, 11);
-        let val = reg[Register::RPC as usize].wrapping_add(pc_offset);
-
-        reg[Register::RPC as usize] = val;
+        reg[Register::RPC as usize] += pc_offset;
     } else {
         let r1 = (instr >> 6) & 0x7;
 

@@ -5,10 +5,9 @@ use signal_hook::{consts::signal::SIGINT, iterator::Signals};
 use termios::{self, tcsetattr, Termios, ECHO, ICANON, TCSANOW};
 
 pub fn disable_input_buffering() {
-    let mut termios = Termios::from_fd(STDIN_FILENO).unwrap();
+    let mut termios = termios::Termios::from_fd(STDIN_FILENO).unwrap();
 
-    termios.c_lflag &= !(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &termios).unwrap();
+    termios.c_lflag &= !(ICANON | ECHO); // no echo and canonical mode
 }
 
 pub fn restore_input_buffering() {

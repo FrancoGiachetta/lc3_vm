@@ -5,7 +5,7 @@ mod out;
 mod puts;
 mod putsp;
 
-use crate::memory::Memory;
+use crate::{memory::Memory, registers::Register};
 
 pub enum Traps {
     TRAPGETC = 0x20,  /* get character from keyboard, not echoed onto the terminal */

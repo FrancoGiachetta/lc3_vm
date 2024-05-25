@@ -7,11 +7,9 @@ pub enum Flags {
 }
 
 pub fn update_flags(regs: &mut [u16], reg: u16) {
-    let result = regs[reg as usize];
-
-    if result == 0 {
+    if regs[reg as usize] == 0 {
         regs[Register::RCOND as usize] = Flags::FLZRO as u16;
-    } else if result >> 15 != 0 {
+    } else if (regs[reg as usize] >> 15) != 0 {
         regs[Register::RCOND as usize] = Flags::FLNEG as u16;
     } else {
         regs[Register::RCOND as usize] = Flags::FLPOS as u16;

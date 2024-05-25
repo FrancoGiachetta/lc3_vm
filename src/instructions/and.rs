@@ -8,7 +8,7 @@ pub fn and(instr: u16, reg: &mut [u16]) {
     let imm_flag = (instr >> 5) & 0x1;
 
     if imm_flag == 1 {
-        let imm5: u16 = sign_extend(instr & 0xF1, 5);
+        let imm5: u16 = sign_extend(instr & 0x1F, 5);
         reg[r0 as usize] = reg[r1 as usize] & imm5;
     } else {
         let r2: u16 = instr & 0x7;

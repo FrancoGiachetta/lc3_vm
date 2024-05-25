@@ -13,7 +13,7 @@ mod sti;
 mod str_m;
 mod traps;
 
-use crate::memory::Memory;
+use crate::{memory::Memory, registers::Register};
 
 #[derive(Clone, Copy)]
 pub enum Opcodes {
@@ -63,7 +63,17 @@ impl TryFrom<u16> for Opcodes {
 
 pub fn execute_instruction(mem: &mut Memory, reg: &mut [u16], instr: u16, running: &mut bool) {
     let op: u16 = instr >> 12;
-
+    /*
+        println!("\n OP: {op}");
+        println!("REG 0: {}", reg[Register::RR0 as usize]);
+        println!("REG 1: {}", reg[Register::RR1 as usize]);
+        println!("REG 2: {}", reg[Register::RR2 as usize]);
+        println!("REG 3: {}", reg[Register::RR3 as usize]);
+        println!("REG 4: {}", reg[Register::RR4 as usize]);
+        println!("REG 5: {}", reg[Register::RR5 as usize]);
+        println!("REG 6: {}", reg[Register::RR6 as usize]);
+        println!("REG 7: {}", reg[Register::RR7 as usize]);
+    */
     match op.try_into().unwrap() {
         Opcodes::OPADD => add::add(instr, reg),
         Opcodes::OPAND => and::and(instr, reg),

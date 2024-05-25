@@ -8,7 +8,7 @@ pub const PC_START: u16 = 0x3000;
 pub const R_COUNT: usize = Register::RCOUNT as usize;
 
 pub enum Register {
-    RR0,
+    RR0 = 0,
     RR1,
     RR2,
     RR3,

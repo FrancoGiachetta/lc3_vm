@@ -1,13 +1,9 @@
 use std::io::Read;
 
-pub fn get_char() -> u8 {
-    let input = std::io::stdin()
-        .bytes()
-        .next()
-        .and_then(|result| result.ok())
-        .unwrap();
+use console::Term;
 
-    print!("{}", input);
+pub fn get_char() -> Result<char, std::io::Error> {
+    let term = Term::stdout();
 
-    input
+    term.read_char()
 }
